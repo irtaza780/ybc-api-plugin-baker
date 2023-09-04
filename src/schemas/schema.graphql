@@ -1,0 +1,21 @@
+extend type Account {
+  isBaker: Boolean
+
+  "current active status of the baker it should be false if the baker has no verified payment"
+  isActiveBaker: Boolean
+}
+
+input UserProfileInput {
+  city: String
+  firstName: String
+  lastName: String
+  state: String
+  phone: String!
+}
+
+extend type Mutation {
+  bakerRegistration(
+    user: CreateUserInput!
+    profile: UserProfileInput!
+  ): newUserResult!
+}
