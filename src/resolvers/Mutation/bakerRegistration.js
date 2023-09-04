@@ -8,7 +8,7 @@ export default async function bakerRegistration(_, args, context, info) {
 
   const { user, profile } = args;
 
-  const accountsServer = injector.get(server_1.AccountsServer);
+const accountsServer = injector.get(server_1.AccountsServer);
   const accountsPassword = injector.get(password_1.AccountsPassword);
   const { Accounts, users } = collections;
   let userId;
@@ -23,7 +23,9 @@ export default async function bakerRegistration(_, args, context, info) {
   console.log("subscribed as baker");
 
   //we will check whether the registration is for an already existing user/customer
-  const existingUser = await Accounts.findOne({ "emails.0.address": user.email });
+  const existingUser = await Accounts.findOne({
+    "emails.0.address": user.email,
+  });
 
   console.log("existing user is ", existingUser);
 
