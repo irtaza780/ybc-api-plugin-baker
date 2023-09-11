@@ -19,3 +19,8 @@ extend type Mutation {
     profile: UserProfileInput!
   ): newUserResult!
 }
+
+extend type Query {
+  bakers: ShopConnection
+  baker(shopId: ID!): Shop
+}

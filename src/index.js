@@ -5,6 +5,7 @@ const pkg = require("../package.json");
 import resolvers from "./resolvers/index.js";
 import schemas from "./schemas/index.js";
 import mutations from "./mutations/index.js";
+import queries from "./queries/index.js";
 
 /**
  * @summary Import and call this function to add this plugin to your API.
@@ -21,5 +22,6 @@ export default async function register(app) {
       schemas,
     },
     mutations,
+    queries,
   });
 }

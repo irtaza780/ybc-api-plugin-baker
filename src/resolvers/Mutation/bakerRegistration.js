@@ -8,10 +8,19 @@ export default async function bakerRegistration(_, args, context, info) {
 
   const { user, profile } = args;
 
-const accountsServer = injector.get(server_1.AccountsServer);
+  const accountsServer = injector.get(server_1.AccountsServer);
   const accountsPassword = injector.get(password_1.AccountsPassword);
-  const { Accounts, users } = collections;
+  const { Accounts, users, Groups } = collections;
   let userId;
+  user["email"] = user.email.toLowerCase();
+
+  const bakerGroup = await Groups.findOne({ slug: "system-manager" });
+  if (!bakerGroup)
+    throw new ReactionError(
+      ("access-denied", "Baker Group Not found, invalid permission")
+    );
+
+  const bakerGroupId = bakerGroup._id;
 
   if (!(user?.email || user.username)) {
     throw new ReactionError(
@@ -31,7 +40,10 @@ const accountsServer = injector.get(server_1.AccountsServer);
 
   // if the user already exist as a baker
   if (existingUser?.isBaker) {
-    throw new ReactionError("", "You are already registered as a baker");
+    throw new ReactionError(
+      "access-denied",
+      "You are already registered as a baker"
+    );
   }
 
   //if the user is already registered as a customer
@@ -47,10 +59,11 @@ const accountsServer = injector.get(server_1.AccountsServer);
           isBaker: true,
           isActiveBaker: true,
         },
+        $push: { groups: bakerGroupId },
       }
     );
-
-    return { userId: existingUser.userId };
+    const loginResult = await accountsServer.loginWithUser(createdUser, infos);
+    return { userId: existingUser.userId, loginResult };
   }
 
   if (user.username) {
@@ -95,7 +108,7 @@ const accountsServer = injector.get(server_1.AccountsServer);
           provides: "default",
         },
       ],
-      groups: [],
+      groups: [bakerGroupId],
       name: null,
       profile: {
         firstName: profile.firstName,
@@ -123,9 +136,11 @@ const accountsServer = injector.get(server_1.AccountsServer);
   //console.log("Login Result ", loginResult);
 
   let genericOtpResponse = await genericOtpFunc(createdUser, context);
+
+  const loginResult = await accountsServer.loginWithUser(createdUser, infos);
   return {
     userId,
-    // loginResult,
+    loginResult,
     createdUser,
   };
 }
