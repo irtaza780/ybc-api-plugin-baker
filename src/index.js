@@ -17,6 +17,11 @@ export default async function register(app) {
     label: pkg.label,
     name: pkg.name,
     version: pkg.version,
+    collections: {
+      InspirationGallery: {
+        name: "InspirationGallery",
+      },
+    },
     graphQL: {
       resolvers,
       schemas,

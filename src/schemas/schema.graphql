@@ -20,7 +20,42 @@ extend type Mutation {
   ): newUserResult!
 }
 
+input BakersFilterInput {
+  city: String
+  region: String
+}
+
+type InspirationGalleryMedia {
+  URLs: ImageSizes
+  priority: Int
+}
+
+type InspirationGallery implements Node {
+  _id: ID!
+  occasion: [String]
+  title: String
+  images: InspirationGalleryMedia
+  bakerId: ID!
+}
+
+input InspirationGalleryMediaInput {
+  URLs: ImageSizesInput
+  priority: Int
+}
+
+input InspirationGalleryInput {
+  occasion: [String]
+  title: String
+  images: [InspirationGalleryMediaInput]
+}
+
+# inspiration gallery mutations
+extend type Mutation {
+  createInspirationGallery(input: InspirationGalleryInput!): InspirationGallery
+  updateInspirationGallery(input: InspirationGalleryInput!): InspirationGallery
+}
+
 extend type Query {
-  bakers: ShopConnection
+  bakers(filter: BakersFilterInput, searchQuery: String): ShopConnection
   baker(shopId: ID!): Shop
 }
