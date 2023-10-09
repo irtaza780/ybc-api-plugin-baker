@@ -8,8 +8,11 @@ export default async function bakers(context, args) {
   console.log("search query ", searchQuery);
 
   const selector = {};
-  if (filter) {
+  if (filter?.city) {
     selector["addressBook.0.city"] = filter.city;
+  }
+
+  if (filter?.region) {
     selector["addressBook.0.region"] = filter.region;
   }
 
