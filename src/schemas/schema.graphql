@@ -1,8 +1,16 @@
+enum BakerMembershipTypeEnum {
+  basic
+  premium
+}
+
 extend type Account {
   isBaker: Boolean
 
   "current active status of the baker it should be false if the baker has no verified payment"
   isActiveBaker: Boolean
+
+  "membership type of the baker"
+  bakerMembershipType: BakerMembershipTypeEnum
 }
 
 input UserProfileInput {
