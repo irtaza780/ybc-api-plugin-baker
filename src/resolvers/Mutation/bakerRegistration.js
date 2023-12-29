@@ -57,7 +57,6 @@ export default async function bakerRegistration(_, args, context, info) {
       {
         $set: {
           isBaker: true,
-          isActiveBaker: true,
         },
         $push: { groups: bakerGroupId },
       }
@@ -123,7 +122,6 @@ export default async function bakerRegistration(_, args, context, info) {
       isDeleted: false,
       type: user.type,
       isBaker: true,
-      isActiveBaker: true,
     };
     await Accounts.insertOne(account);
   }
